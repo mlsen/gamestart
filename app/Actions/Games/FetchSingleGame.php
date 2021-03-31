@@ -14,7 +14,9 @@ class FetchSingleGame
 
     public function handle(string $slug)
     {
-        return Cache::remember('game:' . $slug, 120, function () use ($slug) {
+        $duration = config('cache.duration.single_game');
+
+        return Cache::remember('game:' . $slug, $duration, function () use ($slug) {
             return $this->fetchGame($slug);
         });
     }

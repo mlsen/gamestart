@@ -14,7 +14,9 @@ class FetchRecentlyReviewedGames
 
     public function handle(int $from, int $to, int $limit = 3)
     {
-        return Cache::remember('recently-reviewed-games', 120, function () use ($from, $to, $limit) {
+        $duration = config('cache.duration.recently_reviewed_games');
+
+        return Cache::remember('recently-reviewed-games', $duration, function () use ($from, $to, $limit) {
             return $this->fetchGames($from, $to, $limit);
         });
     }

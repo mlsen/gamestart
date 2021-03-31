@@ -103,4 +103,12 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
+    // Custom values
+    'duration' => [
+        'popular_games' => env('CACHE_DURATION_POPULAR_GAMES', 60 * 60),
+        'recently_reviewed_games' => env('CACHE_DURATION_RECENTLY_REVIEWED_GAMES', 60 * 60),
+        'most_anticipated_games' => env('CACHE_DURATION_MOST_ANTICIPATED_GAMES', 60 * 60),
+        'coming_soon_games' => env('CACHE_DURATION_COMING_SOON_GAMES', 60 * 60),
+        'single_game' => env('CACHE_DURATION_SINGLE_GAME', 60 * 60 * 24),
+    ]
 ];

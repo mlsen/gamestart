@@ -14,7 +14,9 @@ class FetchComingSoonGames
 
     public function handle(int $from, int $limit = 4)
     {
-        return Cache::remember('coming-soon-games', 120, function () use ($from, $limit) {
+        $duration = config('cache.duration.coming_soon_games');
+
+        return Cache::remember('coming-soon-games', $duration, function () use ($from, $limit) {
             return $this->fetchGames($from, $limit);
         });
     }

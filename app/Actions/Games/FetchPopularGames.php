@@ -14,7 +14,9 @@ class FetchPopularGames
 
     public function handle(int $from, int $to, int $limit = 12)
     {
-        return Cache::remember('popular-games', 120, function () use ($to, $from, $limit) {
+        $duration = config('cache.duration.popular_games');
+
+        return Cache::remember('popular-games', $duration, function () use ($to, $from, $limit) {
             return $this->fetchGames($from, $to, $limit);
         });
     }

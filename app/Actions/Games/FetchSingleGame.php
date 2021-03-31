@@ -15,6 +15,7 @@ class FetchSingleGame
     public function handle(string $slug)
     {
         $duration = config('cache.duration.single_game');
+        $duration = 1;
 
         return Cache::remember('game:' . $slug, $duration, function () use ($slug) {
             return $this->fetchGame($slug);
@@ -25,21 +26,45 @@ class FetchSingleGame
     {
         return Game
             ::select([
-                '*'
+                'name',
+                'slug',
+                'aggregated_rating',
+                'rating',
+                'summary',
             ])
             ->with([
-                'similar_games',
-                'similar_games.cover',
-                'similar_games.platforms',
-                'artworks',
-                'cover',
-                'genres',
-                'involved_companies',
-                'involved_companies.company',
-                'platforms',
-                'videos',
-                'screenshots',
-                'websites',
+                'similar_games' => [
+                    'name',
+                    'slug',
+                    'total_rating',
+                ],
+                'similar_games.cover' => [
+                    'url',
+                ],
+                'similar_games.platforms' => [
+                    'abbreviation',
+                ],
+                'cover' => [
+                    'url',
+                ],
+                'genres' => [
+                    'name',
+                ],
+                'involved_companies.company' => [
+                    'name',
+                ],
+                'platforms' => [
+                    'abbreviation',
+                ],
+                'videos' => [
+                    'video_id',
+                ],
+                'screenshots' => [
+                    'url',
+                ],
+                'websites' => [
+                    'url',
+                ],
             ])
             ->where('slug', $slug)
             ->firstOrFail()

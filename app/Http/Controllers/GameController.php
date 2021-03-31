@@ -65,8 +65,8 @@ class GameController extends Controller
                     'coverUrl' => array_key_exists('cover', $game)
                         ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])
                         : 'https://via.placeholder.com/264x374',
-                    'rating' => array_key_exists('rating', $game)
-                        ? round($game['rating'])
+                    'rating' => array_key_exists('total_rating', $game)
+                        ? round($game['total_rating'])
                         : null,
                     'platforms' => array_key_exists('platforms', $game)
                         ? ArrayUtil::toSeparatedString($game['platforms'], 'abbreviation', ', ')

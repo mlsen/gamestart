@@ -29,7 +29,13 @@ class FetchComingSoonGames
                 'first_release_date',
                 'slug',
             ])
-            ->with(['cover' => ['url', 'width', 'height']])
+            ->with([
+                'cover' => [
+                    'url',
+                    'width',
+                    'height',
+                ]
+            ])
             ->where('total_rating_count', '>', 0)
             ->where('first_release_date', '>=', $from)
             ->whereIn('platforms', [48, 49, 130, 6])

@@ -15,6 +15,7 @@ class FetchPopularGames
     public function handle(int $from, int $to, int $limit = 12)
     {
         $duration = config('cache.duration.popular_games');
+        $duration = 1;
 
         return Cache::remember('popular-games', $duration, function () use ($to, $from, $limit) {
             return $this->fetchGames($from, $to, $limit);
@@ -26,12 +27,19 @@ class FetchPopularGames
             ::select([
                 'name',
                 'aggregated_rating',
-                'aggregated_rating_count',
                 'total_rating',
-                'total_rating_count',
                 'slug',
             ])
-            ->with(['cover' => ['url', 'width', 'height'], 'platforms'])
+            ->with([
+                'cover' => [
+                    'url',
+                    'width',
+                    'height',
+                ],
+                'platforms' => [
+                    'abbreviation',
+                ]
+            ])
             ->where('total_rating_count', '>', 0)
             ->where('first_release_date', '>=', $from)
             ->where('first_release_date', '<', $to)

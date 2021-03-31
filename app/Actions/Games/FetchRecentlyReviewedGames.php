@@ -27,13 +27,20 @@ class FetchRecentlyReviewedGames
             ::select([
                 'name',
                 'aggregated_rating',
-                'aggregated_rating_count',
                 'total_rating',
-                'total_rating_count',
                 'summary',
                 'slug',
             ])
-            ->with(['cover' => ['url', 'width', 'height'], 'platforms'])
+            ->with([
+                'cover' => [
+                    'url',
+                    'width',
+                    'height'
+                ],
+                'platforms' => [
+                    'abbreviation',
+                ]
+            ])
             ->where('total_rating_count', '>', 0)
             ->where('first_release_date', '>=', $from)
             ->where('first_release_date', '<', $to)

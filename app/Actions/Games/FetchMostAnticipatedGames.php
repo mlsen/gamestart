@@ -30,7 +30,13 @@ class FetchMostAnticipatedGames
                 'hypes',
                 'slug',
             ])
-            ->with(['cover' => ['url', 'width', 'height']])
+            ->with([
+                'cover' => [
+                    'url',
+                    'width',
+                    'height'
+                ]
+            ])
             ->where('hypes', '>', 0)
             ->where('first_release_date', '>=', $from)
             ->where('first_release_date', '<', $to)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Games\FetchSingleGame;
 use App\Utils\ArrayUtil;
+use App\ViewModels\GameViewModel;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use MarcReichel\IGDBLaravel\Exceptions\ModelNotFoundException;
@@ -23,9 +24,7 @@ class GameController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-        return view('show', [
-            'game' => $this->formatGameForView($game),
-        ]);
+        return view('show', ['game' => new GameViewModel($game)]);
     }
 
     private function formatGameForView(array $game): array

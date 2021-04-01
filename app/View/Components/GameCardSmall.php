@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\ViewModels\GameViewModel;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -9,18 +10,17 @@ use Illuminate\View\Component;
 class GameCardSmall extends Component
 {
     /**
-     * @var array
+     * @var GameViewModel
      */
-    public $game;
+    public GameViewModel $game;
 
     /**
      * Create a new component instance.
      *
-     * @param array $game
+     * @param GameViewModel $game
      */
-    public function __construct(array $game)
+    public function __construct(GameViewModel $game)
     {
-        //
         $this->game = $game;
     }
 

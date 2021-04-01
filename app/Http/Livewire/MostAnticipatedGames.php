@@ -3,33 +3,30 @@
 namespace App\Http\Livewire;
 
 use App\Actions\Games\FetchMostAnticipatedGames;
-use App\Utils\ArrayUtil;
+use App\ViewModels\GameViewModel;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class MostAnticipatedGames extends Component
 {
-    public $mostAnticipatedGames = [];
+    public Collection $mostAnticipatedGames;
+
+    public function mount() {
+        $this->mostAnticipatedGames = new Collection();
+    }
 
     public function loadMostAnticipatedGames() {
-        $this->mostAnticipatedGames = $this->formatForView((new FetchMostAnticipatedGames())->handle(
+        $this->mostAnticipatedGames = collect((new FetchMostAnticipatedGames())->handle(
             Carbon::now()->timestamp,
             Carbon::now()->addMonths(4)->timestamp,
-        ));
+        ))->map(function ($game) {
+            return new GameViewModel($game);
+        });
     }
 
     public function render()
     {
         return view('livewire.most-anticipated-games');
-    }
-
-    private function formatForView(array $games): array {
-        return collect($games)->map(function ($game) {
-            return collect($game)->merge([
-                'coverUrl' => Str::replaceFirst('thumb', 'cover_small', $game['cover']['url']),
-                'releaseDate' => Carbon::parse($game['first_release_date'])->format('M d, Y'),
-            ]);
-        })->toArray();
     }
 }

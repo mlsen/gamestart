@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\ViewModels\GameViewModel;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -9,25 +10,25 @@ use Illuminate\View\Component;
 class GameCard extends Component
 {
     /**
-     * @var array
+     * @var GameViewModel
      */
-    public $game;
+    public GameViewModel $game;
 
     /**
      * @var string
      */
-    public $ratingSlugPrefix;
+    public string $ratingSlugPrefix;
 
-    public $eventBased = false;
+    public bool $eventBased = false;
 
     /**
      * Create a new component instance.
      *
-     * @param array $game
+     * @param GameViewModel $game
      * @param string $ratingSlugPrefix
      * @param bool $eventBased
      */
-    public function __construct(array $game, string $ratingSlugPrefix, bool $eventBased)
+    public function __construct(GameViewModel $game, string $ratingSlugPrefix, bool $eventBased)
     {
         //
         $this->game = $game;

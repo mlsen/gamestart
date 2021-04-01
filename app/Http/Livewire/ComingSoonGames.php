@@ -3,32 +3,45 @@
 namespace App\Http\Livewire;
 
 use App\Actions\Games\FetchComingSoonGames;
+use App\ViewModels\GameViewModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ComingSoonGames extends Component
 {
-    public $comingSoonGames = [];
+    /**
+     * @var Collection
+     */
+    public Collection $comingSoonGames;
 
-    public function loadComingSoonGames()
-    {
-        $this->comingSoonGames = $this->formatForView((new FetchComingSoonGames())->handle(
-            Carbon::now()->timestamp,
-        ));
+    /**
+     * Initializes the Component
+     */
+    public function mount() {
+        $this->comingSoonGames = new Collection();
     }
 
+    /**
+     * Loads the games asynchronously
+     */
+    public function loadComingSoonGames()
+    {
+        $this->comingSoonGames = collect((new FetchComingSoonGames())->handle(
+            Carbon::now()->timestamp,
+        ))->map(function ($game) {
+            return new GameViewModel($game);
+        });
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
     public function render()
     {
         return view('livewire.coming-soon-games');
-    }
-
-    private function formatForView(array $games): array {
-        return collect($games)->map(function ($game) {
-            return collect($game)->merge([
-                'coverUrl' => Str::replaceFirst('thumb', 'cover_small', $game['cover']['url']),
-                'releaseDate' => Carbon::parse($game['first_release_date'])->format('M d, Y'),
-            ]);
-        })->toArray();
     }
 }

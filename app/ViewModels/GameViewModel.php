@@ -63,9 +63,13 @@ class GameViewModel
         return ArrayUtil::toSeparatedString($this->game['genres'], 'name', ', ');
     }
 
+    public function hasPlatforms(): bool {
+        return array_key_exists('platforms', $this->game);
+    }
+
     public function platforms(): ?string
     {
-        if (!isset($this->game['platforms'])) {
+        if (!$this->hasPlatforms()) {
             return null;
         }
 

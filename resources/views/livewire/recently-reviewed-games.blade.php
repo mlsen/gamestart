@@ -2,28 +2,28 @@
         @forelse($recentlyReviewedGames as $game)
             <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
                 <div class="relative flex-none">
-                    <a href="{{ route('games.show', ['slug' => $game['slug']]) }}">
-                        <img src="{{ $game['coverUrl'] }}"
+                    <a href="{{ route('games.show', ['slug' => $game->slug()]) }}">
+                        <img src="{{ $game->coverUrl('big') }}"
                                      alt="game cover" class="w-48 hover:opacity-75 transition ease-in-out duration-150" width="264" height="274">
                     </a>
-                    @if ($game['rating'])
-                        <div id="reviewed_{{ $game['slug'] }}" class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full"
+                    @if ($game->totalRating())
+                        <div id="reviewed_{{ $game->slug() }}" class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full"
                              style="right: -20px; bottom: -20px">
                         </div>
                     @endif
                 </div>
 
                 <div class="ml-12">
-                    <a href="#"
-                       class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{ $game['name'] }}</a>
+                    <a href="{{ route('games.show', ['slug' => $game->slug()]) }}"
+                       class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{ $game->name() }}</a>
 
-                    @if ($game['platforms'])
+                    @if ($game->hasPlatforms())
                         <div class="text gray-400 mt-1">
-                            {{ $game['platforms'] }}
+                            {{ $game->platforms() }}
                         </div>
                     @endif
                     <p class="mt-6 text-gray-400 hidden lg:block">
-                        {{ $game['summary'] }}
+                        {{ $game->summary() }}
                     </p>
                 </div>
             </div>

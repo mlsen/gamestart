@@ -160,63 +160,67 @@
         </div>
 
 
-        <div class="images-container border-b border-gray-800 pb-12 mt-8"
-             x-data="{ isImageModalVisible: false, image: ''}"
-        >
-            <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Images</h2>
+        @if($game->hasScreenshots())
+            <div class="images-container border-b border-gray-800 pb-12 mt-8"
+                 x-data="{ isImageModalVisible: false, image: ''}"
+            >
+                <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Images</h2>
 
-            <div class="md:grid md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 space-y-4 md:space-y-0">
-                @foreach($game->screenshots(6) as $screenshot)
-                    <div>
-                        <a href="#" @click.prevent="
-                            isImageModalVisible = true,
-                            image = '{{ $screenshot['huge'] }}'
-                        ">
-                            <img src="{{ $screenshot['big'] }}"
-                                 alt="cover"
-                                 class="hover:opacity-75 transition ease-in-out duration-150"
-                            >
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-
-            <template x-if="isImageModalVisible">
-                <div
-                    style="background-color: rgba(0, 0, 0, .5);"
-                    class="z-50 fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
-                >
-                    <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
-                        <div class="bg-gray-900 rounded"
-                             @click.away="isImageModalVisible = false"
-                        >
-                            <div class="flex justify-end pr-4 pt-2">
-                                <button
-                                    class="text-3xl leading-none hover:text-gray-300"
-                                    @click="isImageModalVisible = false"
-                                    @keydown.escape.window="isImageModalVisible = false"
+                <div class="md:grid md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 space-y-4 md:space-y-0">
+                    @foreach($game->screenshots(6) as $screenshot)
+                        <div>
+                            <a href="#" @click.prevent="
+                                isImageModalVisible = true,
+                                image = '{{ $screenshot['huge'] }}'
+                            ">
+                                <img src="{{ $screenshot['big'] }}"
+                                     alt="cover"
+                                     class="hover:opacity-75 transition ease-in-out duration-150"
                                 >
-                                    &times;
-                                </button>
-                            </div>
-                            <div class="modal-body px-8 py-8">
-                                <img :src="image" alt="screenshot">
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+
+                <template x-if="isImageModalVisible">
+                    <div
+                        style="background-color: rgba(0, 0, 0, .5);"
+                        class="z-50 fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
+                    >
+                        <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                            <div class="bg-gray-900 rounded"
+                                 @click.away="isImageModalVisible = false"
+                            >
+                                <div class="flex justify-end pr-4 pt-2">
+                                    <button
+                                        class="text-3xl leading-none hover:text-gray-300"
+                                        @click="isImageModalVisible = false"
+                                        @keydown.escape.window="isImageModalVisible = false"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                                <div class="modal-body px-8 py-8">
+                                    <img :src="image" alt="screenshot">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </template>
+                </template>
+            </div>
+        @endif
 
-        </div>
-        <div class="similar-games-container mt-8">
-            <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Similar Games</h2>
-            <div class="popular-games text-sm md:grid md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12">
+        @if ($game->hasSimilarGames())
+            <div class="similar-games-container mt-8">
+                <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Similar Games</h2>
+                <div class="popular-games text-sm md:grid md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12">
 
-                @foreach($game->similarGames() as $game)
-                    <x-game-card :game="$game" rating-slug-prefix="similar" :event-based="false"/>
-                @endforeach
+                    @foreach($game->similarGames(6) as $game)
+                        <x-game-card :game="$game" rating-slug-prefix="similar" :event-based="false"/>
+                    @endforeach
 
-            </div> <!-- End popular games -->
-        </div>
+                </div> <!-- End popular games -->
+            </div>
+        @endif
     </div>
 @endsection

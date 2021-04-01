@@ -10,7 +10,8 @@
                 <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Recently Reviewed</h2>
                 <livewire:recently-reviewed-games />
             </div>
-            <div class="lg:w-1/4 mt-16">
+
+            <div class="lg:w-1/4">
                 <div class="most-anticipated-container">
                     <h2 class="h2 text-blue-500 uppercase tracking-wide font-semibold">Most Anticipated</h2>
                     <livewire:most-anticipated-games />

@@ -6,6 +6,7 @@ namespace App\ViewModels;
 
 use App\Utils\ArrayUtil;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\ViewModels\ViewModel;
 
@@ -109,10 +110,14 @@ class GameViewModel
         return null;
     }
 
-    public function screenshots(int $amount): ?array
+    public function hasScreenshots(): bool {
+        return array_key_exists('screenshots', $this->game);
+    }
+
+    public function screenshots(int $amount): Collection
     {
-        if (!array_key_exists('screenshots', $this->game)) {
-            return null;
+        if (!$this->hasScreenshots()) {
+            return new Collection();
         }
 
         return collect($this->game['screenshots'])->map(function ($screenshot) {
@@ -120,7 +125,7 @@ class GameViewModel
                 'big' => Str::replaceFirst('thumb', 'screenshot_big', $screenshot['url']),
                 'huge' => Str::replaceFirst('thumb', 'screenshot_huge', $screenshot['url']),
             ];
-        })->take($amount)->toArray();
+        })->take($amount);
     }
 
     public function trailer(): ?string {
@@ -131,15 +136,19 @@ class GameViewModel
         return 'https://youtube.com/embed/' . $this->game['videos'][0]['video_id'];
     }
 
-    public function similarGames(): ?\Illuminate\Support\Collection
+    public function hasSimilarGames(): bool {
+        return array_key_exists('similar_games', $this->game);
+    }
+
+    public function similarGames(int $amount): Collection
     {
-        if (!array_key_exists('similar_games', $this->game)) {
-            return null;
+        if (!$this->hasSimilarGames()) {
+            return new Collection();
         }
 
         return collect($this->game['similar_games'])->map(function ($game) {
             return new GameViewModel($game);
-        });
+        })->take($amount);
     }
 
     public function social(): array {

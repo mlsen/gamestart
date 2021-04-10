@@ -28,7 +28,7 @@ class PopularGames extends Component
         $this->popularGames->filter(function ($game) {
             return $game->totalRating();
         })->each(function ($game) {
-            $this->emit('recentlyReviewedGameWithRatingAdded', [
+            $this->emit('popularGameWithRatingAdded', [
                 'slug' => 'popular_' . $game->slug(),
                 'rating' => $game->totalRating() / 100,
             ]);

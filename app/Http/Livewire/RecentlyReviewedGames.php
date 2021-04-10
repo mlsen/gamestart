@@ -3,22 +3,23 @@
 namespace App\Http\Livewire;
 
 use App\Actions\Games\FetchRecentlyReviewedGames;
-use App\Utils\ArrayUtil;
 use App\ViewModels\GameViewModel;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use MarcReichel\IGDBLaravel\Models\Game;
 
 class RecentlyReviewedGames extends Component
 {
-    public Collection $recentlyReviewedGames ;
+    public Collection $recentlyReviewedGames;
 
-    public function mounted() {
+    public function mount(): void
+    {
         $this->recentlyReviewedGames = new Collection();
     }
 
-    public function loadRecentlyReviewedGames() {
+    public function loadRecentlyReviewedGames(): void
+    {
         $this->recentlyReviewedGames = collect((new FetchRecentlyReviewedGames())->handle(
             Carbon::now()->subMonths(2)->timestamp,
             Carbon::now()->timestamp,
@@ -26,12 +27,12 @@ class RecentlyReviewedGames extends Component
             return new GameViewModel($game);
         });
 
-        collect($this->recentlyReviewedGames)->filter(function ($game) {
-            return $game['rating'];
-        })->each(function ($game) {
-            $this->emit('gameWithRatingAdded', [
-                'slug' => 'reviewed_' . $game['slug'],
-                'rating' => $game['rating'] / 100,
+        collect($this->recentlyReviewedGames)->filter(function (GameViewModel $game) {
+            return $game->totalRating() !== null;
+        })->each(function (GameViewModel $game) {
+            $this->emit('recentlyReviewedGameWithRatingAdded', [
+                'slug' => 'reviewed_' . $game->slug(),
+                'rating' => $game->totalRating() / 100,
             ]);
         });
     }

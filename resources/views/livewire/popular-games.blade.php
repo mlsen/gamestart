@@ -11,6 +11,6 @@
 
 @push('scripts')
     @include('partials._rating', [
-        'event' => 'gameWithRatingAdded'
+        'event' => 'popularGameWithRatingAdded'
     ])
 @endpush
